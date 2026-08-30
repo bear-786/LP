@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>การถ่ายทอดสด P | Kingdom of Thailand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Serif+Thai:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#0a1a2f;
+    --navy-panel:#122a4a;
+    --navy-line:#25436b;
+    --gold:#c9a961;
+    --gold-bright:#e4c680;
+    --parchment:#f3ecdc;
+    --ink:#e9e4d6;
+    --ink-dim:#a9b6c9;
+    --seal-red:#8c2b34;
+    --seal-red-bright:#b8404a;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 1200px 600px at 50% -10%, rgba(201,169,97,0.08), transparent 60%),
+      var(--navy-deep);
+    color:var(--ink);
+    font-family:'Noto Sans Thai','Cormorant Garamond',serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .thai-serif{font-family:'Noto Serif Thai','Cormorant Garamond',serif;}
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    border-bottom:1px solid var(--navy-line);
+    padding:22px 24px 18px;
+    text-align:center;
+    position:relative;
+  }
+  .masthead::before, .masthead::after{
+    content:"";
+    position:absolute;
+    top:0; bottom:0;
+    width:1px;
+    background:linear-gradient(var(--navy-line), transparent);
+  }
+  .eyebrow{
+    letter-spacing:.32em;
+    font-size:11px;
+    color:var(--gold);
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .crest{
+    width:56px; height:56px;
+    margin:0 auto 10px;
+    position:relative;
+  }
+  .crest svg{width:100%;height:100%;display:block;}
+  .brand-title{
+    font-family:'Noto Serif Thai', serif;
+    font-weight:700;
+    font-size:clamp(24px,4vw,34px);
+    margin:0;
+    color:var(--parchment);
+    letter-spacing:.02em;
+  }
+  .brand-sub{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--ink-dim);
+    font-size:15px;
+    margin-top:6px;
+    letter-spacing:.04em;
+  }
+
+  nav.tabs{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    margin-top:18px;
+  }
+  nav.tabs a{
+    color:var(--ink-dim);
+    text-decoration:none;
+    font-size:13px;
+    letter-spacing:.06em;
+    padding:8px 16px;
+    border:1px solid transparent;
+    border-radius:2px;
+    transition:all .2s ease;
+  }
+  nav.tabs a:hover{ color:var(--gold-bright); border-color:var(--navy-line); }
+
+  main{max-width:1040px; margin:0 auto; padding:0 24px 80px;}
+
+  /* ---------- live proclamation card ---------- */
+  .proclamation{
+    margin-top:44px;
+    border:1px solid var(--navy-line);
+    background:linear-gradient(180deg, rgba(255,255,255,0.015), transparent);
+    padding:2px;
+    position:relative;
+  }
+  .proclamation-inner{
+    border:1px solid rgba(201,169,97,0.25);
+    padding:36px clamp(18px,4vw,48px) 44px;
+  }
+  .status-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .status-dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--seal-red-bright);
+    box-shadow:0 0 0 0 rgba(184,64,74,.6);
+    animation:pulse 1.8s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(184,64,74,.55);}
+    70%{box-shadow:0 0 0 10px rgba(184,64,74,0);}
+    100%{box-shadow:0 0 0 0 rgba(184,64,74,0);}
+  }
+  .status-label{
+    font-size:12px;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color:var(--seal-red-bright);
+  }
+  .proclamation h2{
+    text-align:center;
+    font-family:'Noto Serif Thai', serif;
+    font-size:clamp(20px,3vw,28px);
+    margin:0 0 26px;
+    color:var(--parchment);
+    font-weight:600;
+  }
+  .player-frame{
+    position:relative;
+    width:100%;
+    padding-top:56.25%;
+    background:#040d1c;
+    border:1px solid var(--navy-line);
+  }
+  .player-frame iframe{
+    position:absolute; inset:0; width:100%; height:100%; border:0;
+  }
+  .player-fallback{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:14px; text-align:center; padding:20px;
+  }
+  .player-fallback .glyph{ opacity:.5; }
+  .player-fallback p{
+    color:var(--ink-dim);
+    font-size:14px;
+    max-width:360px;
+    line-height:1.7;
+    margin:0;
+  }
+  .watch-btn{
+    display:inline-block;
+    margin-top:22px;
+    text-align:center;
+    width:100%;
+  }
+  .watch-btn a{
+    color:var(--gold-bright);
+    text-decoration:none;
+    font-size:13px;
+    letter-spacing:.14em;
+    border-bottom:1px solid var(--navy-line);
+    padding-bottom:4px;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .watch-btn a:hover{ border-color:var(--gold-bright); color:var(--gold); }
+
+  .platform-switch{
+    display:flex;
+    justify-content:center;
+    gap:2px;
+    margin-bottom:24px;
+  }
+  .platform-switch button{
+    font-family:'Noto Sans Thai', sans-serif;
+    background:transparent;
+    border:1px solid var(--navy-line);
+    color:var(--ink-dim);
+    font-size:12px;
+    letter-spacing:.08em;
+    padding:8px 20px;
+    cursor:pointer;
+    transition:all .2s ease;
+  }
+  .platform-switch button.active{
+    color:var(--navy-deep);
+    background:var(--gold);
+    border-color:var(--gold);
+  }
+  .platform-switch button:not(.active):hover{
+    color:var(--gold-bright);
+    border-color:var(--gold);
+  }
+
+  /* ---------- section header ---------- */
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    margin:72px 0 26px;
+  }
+  .section-head .num{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    color:var(--gold);
+    font-size:15px;
+  }
+  .section-head h3{
+    font-family:'Noto Serif Thai', serif;
+    font-weight:600;
+    font-size:20px;
+    margin:0;
+    color:var(--parchment);
+  }
+  .section-head .rule{
+    flex:1;
+    height:1px;
+    background:linear-gradient(to right, var(--navy-line), transparent);
+  }
+  .section-note{
+    color:var(--ink-dim);
+    font-size:13.5px;
+    line-height:1.8;
+    margin:-14px 0 30px;
+    max-width:640px;
+  }
+
+  /* ---------- archive list ---------- */
+  .archive-frame{
+    border:1px solid var(--navy-line);
+    background:rgba(255,255,255,0.015);
+    padding:1px;
+  }
+  .archive-frame iframe{
+    display:block; width:100%; height:520px; border:0;
+  }
+  @media (max-width:640px){
+    .archive-frame iframe{ height:420px; }
+  }
+
+  .setup-note{
+    margin-top:16px;
+    border-left:2px solid var(--gold);
+    padding:10px 16px;
+    background:rgba(201,169,97,0.06);
+    font-size:12.5px;
+    color:var(--ink-dim);
+    line-height:1.8;
+  }
+  .setup-note code{
+    color:var(--gold-bright);
+    font-family:monospace;
+  }
+
+  footer{
+    border-top:1px solid var(--navy-line);
+    margin-top:80px;
+    padding:28px 24px 40px;
+    text-align:center;
+  }
+  footer p{
+    margin:4px 0;
+    font-size:11.5px;
+    letter-spacing:.08em;
+    color:var(--ink-dim);
+  }
+  footer .fdisclaimer{
+    color:#5d6c82;
+    font-size:10.5px;
+    margin-top:10px;
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="eyebrow">สำนักงานสื่อสารมวลชนแห่งราชอาณาจักร</div>
+  <div class="crest">
+    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="30" fill="none" stroke="#c9a961" stroke-width="1.2"/>
+      <circle cx="32" cy="32" r="25" fill="none" stroke="#c9a961" stroke-width="0.6" opacity="0.6"/>
+      <path d="M32 14 L38 27 L52 29 L42 39 L45 53 L32 46 L19 53 L22 39 L12 29 L26 27 Z"
+            fill="none" stroke="#e4c680" stroke-width="1.1" stroke-linejoin="round"/>
+      <circle cx="32" cy="32" r="4.5" fill="#c9a961"/>
+    </svg>
+  </div>
+  <h1 class="brand-title">การถ่ายทอดสด</h1>
+  <div class="brand-sub">Kingdom of Thailand &mdash; Official Broadcast Archive</div>
+  <nav class="tabs">
+    <a href="#live">ถ่ายทอดสด</a>
+    <a href="#archive">ย้อนหลัง</a>
+    <a href="#about">เกี่ยวกับ</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="proclamation" id="live">
+    <div class="proclamation-inner">
+      <div class="status-row">
+        <span class="status-dot"></span>
+        <span class="status-label" id="statusLabel">กำลังตรวจสอบสัญญาณ</span>
+      </div>
+      <h2>การถ่ายทอดสดในขณะนี้</h2>
+
+      <div class="platform-switch">
+        <button id="btnYoutube" class="active" onclick="switchPlatform('youtube')">YOUTUBE</button>
+        <button id="btnTwitch" onclick="switchPlatform('twitch')">TWITCH</button>
+      </div>
+
+      <div class="player-frame" id="playerFrame">
+        <iframe
+          id="liveIframe"
+          src="https://www.youtube.com/embed/live_stream?channel=UCRX7IAC0I71acTavtQOAtiQ&autoplay=0"
+          title="ถ่ายทอดสด Kingdom of Thailand"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <div class="watch-btn">
+        <a id="watchLink" href="https://www.youtube.com/@HeadquartersP/live" target="_blank" rel="noopener">
+          รับชมเต็มจอบน YouTube ↗
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-head" id="archive">
+    <span class="num">II.</span>
+    <h3>บันทึกการถ่ายทอดสดย้อนหลัง</h3>
+    <span class="rule"></span>
+  </div>
+  <p class="section-note">
+    รายการถ่ายทอดสดที่ผ่านมาทั้งหมดของช่องจะถูกจัดเก็บโดยอัตโนมัติหลังจบการถ่ายทอดแต่ละครั้ง
+    เลือกชมได้จากรายการด้านล่าง
+  </p>
+
+  <div class="archive-frame">
+    <iframe
+      src="https://www.youtube.com/embed/videoseries?list=UURX7IAC0I71acTavtQOAtiQ"
+      title="คลังวิดีโอย้อนหลัง"
+      allow="accelerometer; encrypted-media; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <div class="setup-note">
+    <strong style="color:#e4c680;">เกี่ยวกับ Twitch:</strong> คลังย้อนหลังด้านบนดึงจาก YouTube เพราะเก็บวิดีโอถาวรและฝังเป็นรายการอัตโนมัติได้
+    ส่วน Twitch จะเก็บ VOD ให้อัตโนมัติเพียง 14–60 วันเท่านั้น (ตามประเภทบัญชี) และไม่มีวิดเจ็ตฝังรายการทั้งหมดแบบสาธารณะ
+    หากต้องการเก็บย้อนหลังจาก Twitch ถาวร แนะนำตั้งค่าใน Twitch ให้ "บันทึกเป็น Highlight" หรืออัปโหลดคลิปไป YouTube ทีหลัง —
+    ระหว่างนี้ดูคลัง VOD ของ Twitch ได้ที่
+    <a href="https://www.twitch.tv/bear_45678/videos" target="_blank" rel="noopener" style="color:#e4c680;">twitch.tv/bear_45678/videos ↗</a>
+  </div>
+
+  <div class="section-head" id="about">
+    <span class="num">III.</span>
+    <h3>เกี่ยวกับระบบนี้</h3>
+    <span class="rule"></span>
+  </div>
+  <p class="section-note">
+    เว็บไซต์นี้ทำหน้าที่เป็นศูนย์รวมการถ่ายทอดสดของชุมชนจำลอง Kingdom of Thailand
+    ผู้จัดรายการสตรีมผ่าน OBS ไปยัง YouTube Live โดยระบบนี้จะดึงสัญญาณไลฟ์และคลังวิดีโอ
+    ย้อนหลังจากช่องอัตโนมัติ ไม่ต้องอัปเดตลิงก์เองทุกครั้ง
+  </p>
+
+</main>
+
+<footer>
+  <p>KINGDOM OF THAILAND &middot; BROADCAST OFFICE</p>
+  <p class="fdisclaimer">เว็บไซต์จำลองสำหรับกิจกรรมชุมชน Roblox ไม่เกี่ยวข้องกับหน่วยงานราชการจริง</p>
+</footer>
+
+<script>
+  // ตรวจสอบสถานะไลฟ์แบบเบื้องต้นด้วย YouTube oEmbed (ไม่ต้องใช้ API key)
+  // หมายเหตุ: หลังใส่ Channel ID จริงแล้ว ฟังก์ชันนี้จะพยายามอ่านสถานะจาก oEmbed ของหน้า /live
+  const statusLabel = document.getElementById('statusLabel');
+  const channelHandle = 'HeadquartersP';
+
+  // Twitch ต้องระบุโดเมนที่ฝังจริง (parent) — เปลี่ยนตรงนี้ถ้าย้ายโฮสต์
+  const twitchChannel = 'bear_45678';
+  const twitchParent = 'bear-786.github.io';
+
+  const liveIframe = document.getElementById('liveIframe');
+  const watchLink = document.getElementById('watchLink');
+  const btnYoutube = document.getElementById('btnYoutube');
+  const btnTwitch = document.getElementById('btnTwitch');
+
+  function switchPlatform(platform){
+    if(platform === 'twitch'){
+      liveIframe.src = `https://player.twitch.tv/?channel=${twitchChannel}&parent=${twitchParent}&autoplay=false`;
+      watchLink.href = `https://www.twitch.tv/${twitchChannel}`;
+      watchLink.textContent = 'รับชมเต็มจอบน Twitch ↗';
+      btnTwitch.classList.add('active');
+      btnYoutube.classList.remove('active');
+    } else {
+      liveIframe.src = 'https://www.youtube.com/embed/live_stream?channel=UCRX7IAC0I71acTavtQOAtiQ&autoplay=0';
+      watchLink.href = 'https://www.youtube.com/@HeadquartersP/live';
+      watchLink.textContent = 'รับชมเต็มจอบน YouTube ↗';
+      btnYoutube.classList.add('active');
+      btnTwitch.classList.remove('active');
+    }
+  }
+
+  async function checkLiveStatus(){
+    try{
+      const res = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/@${channelHandle}/live&format=json`);
+      if(res.ok){
+        statusLabel.textContent = 'กำลังถ่ายทอดสด';
+        statusLabel.style.color = '#b8404a';
+      } else {
+        statusLabel.textContent = 'ไม่มีการถ่ายทอดสดขณะนี้';
+        statusLabel.style.color = '#a9b6c9';
+      }
+    }catch(e){
+      statusLabel.textContent = 'ไม่มีการถ่ายทอดสดขณะนี้';
+      statusLabel.style.color = '#a9b6c9';
+    }
+  }
+  checkLiveStatus();
+</script>
+
+</body>
+</html>
